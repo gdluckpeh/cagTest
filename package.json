@@ -1,0 +1,29 @@
+{
+  "name": "something",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/api.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "nodemon src/api.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1546.0",
+    "aws-serverless-express": "^3.4.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^6.3.4"
+  },
+  "compilerOptions": {
+    "target": "ES6"
+  }
+}
