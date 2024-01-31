@@ -33,44 +33,44 @@
 
 7. a) run
 
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"name": "Pencil", "category": "Stationary", "price": "6.00"}' http://localhost:3000/items
-```
-
-this should insert a new data into the DynamoDB and return you a newly inserted id.
+   ```bash
+   curl -X POST -H "Content-Type: application/json" -d '{"name": "Pencil", "category": "Stationary", "price": "6.00"}' http://localhost:3000/items
+   ```
+   
+   this should insert a new data into the DynamoDB and return you a newly inserted id.
 
    b) run
 
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"name": "Notebook", "category": "Stationary", "price": "5.5"}' http://localhost:3000/items
-```
-
-this should return you an existing id, as well as to update the price. You may change the price.
+   ```bash
+   curl -X POST -H "Content-Type: application/json" -d '{"name": "Notebook", "category": "Stationary", "price": "5.5"}' http://localhost:3000/items
+   ```
+   
+   this should return you an existing id, as well as to update the price. You may change the price.
 
    c) run
 
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"dt_from": "2022-01-01 10:00:00", "dt_to": "2024-02-01 23:59:59"}' http://localhost:3000/items/queryByDateRange
-
-```
-
-this should return you an array with various items between these datetime.
+   ```bash
+   curl -X POST -H "Content-Type: application/json" -d '{"dt_from": "2022-01-01 10:00:00", "dt_to": "2024-02-01 23:59:59"}' http://localhost:3000/items/queryByDateRange
+   
+   ```
+   
+   this should return you an array with various items between these datetime.
 
    d) run
 
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"category": "all"}' http://localhost:3000/items/aggregateByCategory
-```
-
-this should return you a list containing everything.
+   ```bash
+   curl -X POST -H "Content-Type: application/json" -d '{"category": "all"}' http://localhost:3000/items/aggregateByCategory
+   ```
+   
+   this should return you a list containing everything.
 
    e) run
 
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"category": “Stationary”}' http://localhost:3000/items/aggregateByCategory
-```
-
-this should return you a list containing only the Category: Stationary.
+   ```bash
+   curl -X POST -H "Content-Type: application/json" -d '{"category": “Stationary”}' http://localhost:3000/items/aggregateByCategory
+   ```
+   
+   this should return you a list containing only the Category: Stationary.
 
 ### Do note that the words inside the commands are case-sensitive (sorry, not much time to make it case-insensitive). Do also note that the time provided is in terms of UTC.
 
