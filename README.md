@@ -25,7 +25,7 @@
 
 ### Great, now we can connect to the database after all configurations is done! Next, we will use the 'curl' command to make HTTP requests to a local server running on 'http://localhost:3000'.
 
-5. We can proceed by running 'npm install' on the same terminal.
+5. We can proceed by running 'npm install' on the same terminal, after cloning of the project.
 
 6. Next, we will kick start the running of server by typing 'npm start'.
 
