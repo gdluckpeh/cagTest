@@ -15,13 +15,13 @@
 
 3. Type 'aws configure' on your terminal, where you will be running your code on.
 
-4a. Type 'AKIA6BGD7GBULSZOFSAV' as your AWS Access Key ID, click enter.
+4. a) Type 'AKIA6BGD7GBULSZOFSAV' as your AWS Access Key ID, click enter.
 
-4b. Type 'f8jfYFE3hKZMo7I6jY7fH3tzsT1Ybc9tSpQTUKvT' as your AWS Secret Access Key, click enter.
+   b) Type 'f8jfYFE3hKZMo7I6jY7fH3tzsT1Ybc9tSpQTUKvT' as your AWS Secret Access Key, click enter.
 
-4c. Type 'ap-southeast-1' as your Default region name, click enter.
+   c) Type 'ap-southeast-1' as your Default region name, click enter.
 
-4d. Type 'None' in your Default output format, click enter.
+   d) Type 'None' in your Default output format, click enter.
 
 ## Great, now we can connect to the database after all configurations is done! Next, we will use the 'curl' command to make HTTP requests to a local server running on 'http://localhost:3000'.
 
@@ -31,7 +31,7 @@
 
 7. While the terminal is running, open another terminal, from here, we are going to do some testings based on the tasks:
 
-7a. run
+7. a) run
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"name": "Pencil", "category": "Stationary", "price": "6.00"}' http://localhost:3000/items
@@ -39,7 +39,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "Pencil", "categor
 
 this should insert a new data into the DynamoDB and return you a newly inserted id.
 
-7b. run
+   b) run
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"name": "Notebook", "category": "Stationary", "price": "5.5"}' http://localhost:3000/items
@@ -47,7 +47,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "Notebook", "categ
 
 this should return you an existing id, as well as to update the price. You may change the price.
 
-7c. run
+   c) run
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"dt_from": "2022-01-01 10:00:00", "dt_to": "2024-02-01 23:59:59"}' http://localhost:3000/items/queryByDateRange
@@ -56,7 +56,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"dt_from": "2022-01-01 10:
 
 this should return you an array with various items between these datetime.
 
-7d. run
+   d) run
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"category": "all"}' http://localhost:3000/items/aggregateByCategory
@@ -64,7 +64,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"category": "all"}' http:/
 
 this should return you a list containing everything.
 
-7e. run
+   e) run
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"category": “Stationary”}' http://localhost:3000/items/aggregateByCategory
