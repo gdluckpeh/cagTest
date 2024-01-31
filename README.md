@@ -11,7 +11,7 @@
 
 2. Download node.js (preferably version 18) from this website: https://nodejs.org/en/blog/release/v18.12.0.
 
-## Next, we will configure AWS access and secret keys. Do note that this is not the best security practice, once this test is done, I will remove it (but rest assured that only minimal permissions are given). This is to connect to the AWS DynamoDB.
+### Next, we will configure AWS access and secret keys. Do note that this is not the best security practice, once this test is done, I will remove it (but rest assured that only minimal permissions are given). This is to connect to the AWS DynamoDB.
 
 3. Type 'aws configure' on your terminal, where you will be running your code on.
 
@@ -23,7 +23,7 @@
 
    d) Type 'None' in your Default output format, click enter.
 
-## Great, now we can connect to the database after all configurations is done! Next, we will use the 'curl' command to make HTTP requests to a local server running on 'http://localhost:3000'.
+### Great, now we can connect to the database after all configurations is done! Next, we will use the 'curl' command to make HTTP requests to a local server running on 'http://localhost:3000'.
 
 5. We can proceed by running 'npm install' on the same terminal.
 
