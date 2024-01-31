@@ -1,102 +1,138 @@
-const AWS = require("aws-sdk/clients/dynamodb");
+const AWS = require("aws-sdk");
+const { v4: uuidv4 } = require("uuid");
 
-const dynamoDB = new AWS.DocumentClient();
+const uuidToInt = (uuid) => {
+  const hexString = uuid.replace(/-/g, "");
+  const bigInt = BigInt(`0x${hexString}`);
+  return Number(bigInt);
+};
+
+AWS.config.update({ region: "ap-southeast-1" }); //Singapore
+
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const tableName = "InventoryDatabase";
 
 const insertOrUpdateItem = async (item) => {
-  const { name, category, price } = item;
-
-  // Check if the item already exists in the DynamoDB table
-  const existingItem = await dynamoDB
-    .get({
+  item.Price = parseFloat(item.Price).toFixed(2);
+  try {
+    const params = {
       TableName: tableName,
-      Key: { name },
-    })
-    .promise();
+      Key: {
+        Name: item.Name,
+      },
+      Item: {
+        Name: item.Name,
+        Category: item.Category,
+        Price: item.Price,
+        ID: uuidToInt(uuidv4()), // to ensure it is granular enough for uniqueness
+        LastUpdatedDate: new Date().toISOString(),
+      },
+    };
 
-  // If the item exists, update the price; otherwise, insert a new item
-  if (existingItem.Item) {
-    await dynamoDB
-      .update({
+    // Check if the item already exists
+    const existingItem = await dynamoDB
+      .query({
         TableName: tableName,
-        Key: { name },
-        UpdateExpression:
-          "SET price = :price, last_updated_dt = :last_updated_dt",
+        KeyConditionExpression: "#Name = :name",
         ExpressionAttributeValues: {
-          ":price": price,
-          ":last_updated_dt": new Date().toISOString(),
+          ":name": item.Name,
+        },
+        ExpressionAttributeNames: {
+          "#Name": "Name",
         },
       })
       .promise();
-  } else {
-    const id = Math.floor(Math.random() * 100000); // to generate a random ID
-    await dynamoDB
-      .put({
-        TableName: tableName,
-        Item: {
-          id,
-          name,
-          category,
-          price,
-          last_updated_dt: new Date().toISOString(),
-        },
-      })
-      .promise();
-    return id;
+
+    if (existingItem.Items.length > 0) {
+      //if it exists, then update the item price and lastUpdatedDate only
+      await dynamoDB
+        .update({
+          TableName: tableName,
+          Key: {
+            Name: item.Name,
+          },
+          UpdateExpression:
+            "SET Price = :price, LastUpdatedDate = :lastUpdatedDate", //note that Category cant be updated here
+          ExpressionAttributeNames: {
+            "#Name": "Name",
+          },
+          ExpressionAttributeValues: {
+            ":price": item.Price,
+            ":lastUpdatedDate": new Date().toISOString(),
+          },
+          ConditionExpression: "attribute_exists(#Name)", // Check if the item with the specified name exists
+        })
+        .promise();
+
+      return existingItem.Items[0].ID; // Return the ID of the existing item
+    } else {
+      // if it doesn't exist, insert a new item
+      await dynamoDB.put(params).promise();
+      return params.Item.ID; // Return the ID of the newly inserted item
+    }
+  } catch (error) {
+    console.error("Error inserting/updating item: ", error);
+    throw error;
   }
 };
 
 const queryItemsByDateRange = async (dtFrom, dtTo) => {
-  const params = {
-    TableName: tableName,
-    FilterExpression: "#last_updated_dt BETWEEN :start_date AND :end_date",
-    ExpressionAttributeNames: {
-      "#last_updated_dt": "last_updated_dt",
-    },
-    ExpressionAttributeValues: {
-      ":start_date": dtFrom,
-      ":end_date": dtTo,
-    },
-  };
-
-  const result = await dynamoDB.scan(params).promise();
-  return result.Items;
+  try {
+    const params = {
+      TableName: tableName,
+      FilterExpression: "LastUpdatedDate BETWEEN :start_date AND :end_date",
+      ExpressionAttributeValues: {
+        ":start_date": dtFrom,
+        ":end_date": dtTo,
+      },
+    };
+    console.log("inside here");
+    const result = await dynamoDB.scan(params).promise();
+    return result.Items;
+  } catch (error) {
+    console.error("Error querying items by date range: ", error);
+    throw error;
+  }
 };
 
 const aggregateItemsByCategory = async (category) => {
-  const params = {
-    TableName: tableName,
-  };
+  try {
+    const params = {
+      TableName: tableName,
+    };
 
-  if (category !== "all") {
-    params.FilterExpression = "#category = :category";
-    params.ExpressionAttributeNames = { "#category": "category" };
-    params.ExpressionAttributeValues = { ":category": category };
-  }
-
-  const result = await dynamoDB.scan(params).promise();
-
-  const aggregatedResult = result.Items.reduce((acc, item) => {
-    const category = item.category;
-    const price = parseFloat(item.price);
-
-    if (!acc[category]) {
-      acc[category] = { total_price: price, count: 1 };
-    } else {
-      acc[category].total_price += price;
-      acc[category].count += 1;
+    if (category !== "all") {
+      params.FilterExpression = "Category = :category";
+      params.ExpressionAttributeValues = { ":category": category }; //case sensitive
     }
 
-    return acc;
-  }, {});
+    const result = await dynamoDB.scan(params).promise();
 
-  return Object.entries(aggregatedResult).map(
-    ([category, { total_price, count }]) => ({
-      category,
-      total_price: total_price.toFixed(2),
-      count,
-    })
-  );
+    const aggregatedResult = result.Items.reduce((acc, item) => {
+      const category = item.Category;
+      const price = parseFloat(item.Price);
+
+      if (!acc[category]) {
+        acc[category] = { total_price: price, count: 1 };
+      } else {
+        acc[category].total_price += price;
+        acc[category].count += 1;
+      }
+
+      return acc;
+    }, {});
+
+    return Object.entries(aggregatedResult).map(
+      ([category, { total_price, count }]) => ({
+        category,
+        total_price: total_price.toFixed(2),
+        count,
+      })
+    );
+  } catch (error) {
+    console.error("Error aggregating items by category: ", error);
+    throw error;
+  }
 };
 
 module.exports = {

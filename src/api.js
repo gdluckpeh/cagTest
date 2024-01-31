@@ -13,7 +13,11 @@ app.use(express.json());
 app.post("/items", async (req, res) => {
   try {
     const { name, category, price } = req.body;
-    const id = await insertOrUpdateItem({ name, category, price });
+    const id = await insertOrUpdateItem({
+      Name: name,
+      Category: category,
+      Price: price,
+    });
     res.json({ id });
   } catch (error) {
     console.error(error);
@@ -26,7 +30,7 @@ app.post("/items/queryByDateRange", async (req, res) => {
     const { dt_from, dt_to } = req.body;
     const items = await queryItemsByDateRange(dt_from, dt_to);
     const total_price = items
-      .reduce((sum, item) => sum + parseFloat(item.price), 0)
+      .reduce((sum, item) => sum + parseFloat(item.Price), 0)
       .toFixed(2);
     res.json({ items, total_price });
   } catch (error) {
