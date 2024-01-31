@@ -1,6 +1,6 @@
 # Cag Test
 
-### Hi, I'll be using AWS DynamoDB as a database, with the help of aws-sdk, and Javascript with ExpressJS as a node.js web application framework, with AWS Serverless Express, which is NodeJS-based API framework used for mimicking the routing capabilities of the ExpressJS framework. To start, make sure you have nodejs (preferably node.js 18) and AWS CLI installed:
+### Hi, I'll be using AWS DynamoDB as a database, with the help of aws-sdk, and Javascript with ExpressJS as a node.js web application framework. I'll use them along with AWS Serverless Express, which is NodeJS-based API framework used for mimicking the routing capabilities of the ExpressJS framework. To start, make sure you have nodejs (preferably node.js 18) and AWS CLI installed:
 
 ## AWS CLI
 
