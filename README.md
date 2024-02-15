@@ -15,9 +15,9 @@
 
 3. Type 'aws configure' on your terminal, where you will be running your code on.
 
-4. a) Type 'AKIA6BGD7GBULSZOFSAV' as your AWS Access Key ID, click enter.
+4. a) Type '...' as your AWS Access Key ID, click enter.
 
-   b) Type 'f8jfYFE3hKZMo7I6jY7fH3tzsT1Ybc9tSpQTUKvT' as your AWS Secret Access Key, click enter.
+   b) Type '...' as your AWS Secret Access Key, click enter.
 
    c) Type 'ap-southeast-1' as your Default region name, click enter.
 
